@@ -17,11 +17,12 @@ import {
   FormItem,
   FormLabel,
 } from "@/components/ui/form"
+import { v4 as uuidv4 } from 'uuid';
+import {useDraft} from "../lib/store/store"
+import { DraftCard } from "@/components/draftCard";
+import { formSchema } from "@/constants/formSchema"
 
-const formSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters").max(30, "Name must be at most 50 characters"),
-  description: z.string().min(2, "Description must be at least 2 characters").max(500, "Description must be at most 500 characters"),
-});
+
 type FormValues = z.infer<typeof formSchema>;
 
 
@@ -34,12 +35,21 @@ export default function Home() {
       description: "",
     },
   })
+   const {draft , setDraft} = useDraft()
 
-  // Submit handler
-  const onSubmit = (data: FormValues) => {
-    console.log("Form submitted:", data);
-  };
 
+    const onSubmit = (formValue: FormValues) => {
+    const id = uuidv4();
+    const formData = {...formValue,id}
+    form.reset();
+    };
+
+
+    const handleDraft = ()=>{
+      const draftValues = form.getValues();
+      setDraft(draftValues)
+      form.reset();
+    }
   return (
    <section className="p-5">
     <Card>
@@ -56,10 +66,14 @@ export default function Home() {
                     <FormControl>
                       <Input placeholder="Enter your name" {...field} />
                     </FormControl>
+                    {form.formState.errors.name && (
+                       <p className="text-red-500 text-sm mt-1">
+                         {form.formState.errors.name.message}
+                       </p>)}
                   </FormItem>
                 )}
               />
-            <FormField
+             <FormField
                 control={form.control}
                 name="description"
                 render={({ field }) => (
@@ -68,21 +82,32 @@ export default function Home() {
                     <FormControl>
                       <Textarea placeholder="Enter a description" {...field} />
                     </FormControl>
+                      {form.formState.errors.description && (
+                         <p className="text-red-500 text-sm mt-1">
+                           {form.formState.errors.description.message}
+                         </p>
+                      )}
                   </FormItem>
                 )}
               />
-               {/* Buttons */}
                <div className="flex gap-2">
                 <Button type="submit">Send</Button>
-                <Button type="button" variant="outline">
+                <Button 
+                disabled={draft}
+                type="button"   onClick={handleDraft}
+                 variant="outline">
                   Draft
                 </Button>
               </div>
             </form>
          </Form>
-
       </CardContent>
    </Card>
+   {draft ? 
+   
+   <DraftCard form={form} draft={draft} 
+   handleDraft={handleDraft} onSubmit={onSubmit} /> : null
+  }
     <Card className="mt-3">
     <CardHeader>Posted Blogs</CardHeader>
       <CardContent>

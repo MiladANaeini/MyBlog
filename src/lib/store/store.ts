@@ -1,16 +1,10 @@
 import { create } from 'zustand'
-
-export type Status = "Draft" | "Posted"
-export type BlogPosts = {
-    id: string
-    username: string
-    description: string
-    status: Status
-}
-
-export type State = {
-    blogPosts : BlogPosts[]
-}
+import {DraftType} from '../../types/global'
 
 
-const useStore = create(() => ({}))
+
+export const useDraft = create((set) => ({
+
+    draft: null as DraftType | null,
+    setDraft: (draftValue: DraftType) => set(() => ({ draft: draftValue })) ,
+    }))
