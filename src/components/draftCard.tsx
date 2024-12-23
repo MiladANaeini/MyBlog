@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { z } from "zod"
 import {useDraft} from "../lib/store/store"
 import { formSchema } from "@/constants/formSchema"
 
@@ -36,7 +37,7 @@ export const DraftCard = ({onSubmit})=>{
     
     return(
         <>
-         <Card>
+         <Card className="bg-yellow-100">
             <CardHeader>Draft Form</CardHeader>
               <CardContent>
                  <Form {...form}>

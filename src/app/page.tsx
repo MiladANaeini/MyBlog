@@ -21,12 +21,14 @@ import { v4 as uuidv4 } from 'uuid';
 import {useDraft} from "../lib/store/store"
 import { DraftCard } from "@/components/draftCard";
 import { formSchema } from "@/constants/formSchema"
-
+import { PrismaClient } from '@prisma/client';
+import {DraftType} from "../types/global"
 
 type FormValues = z.infer<typeof formSchema>;
 
 
-export default function Home() {
+const Home = () => {
+    const prisma = new PrismaClient();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -38,11 +40,31 @@ export default function Home() {
    const {draft , setDraft} = useDraft()
 
 
-    const onSubmit = (formValue: FormValues) => {
-    const id = uuidv4();
-    const formData = {...formValue,id}
-    form.reset();
-    };
+    const onSubmit = async (formValue: FormValues) => {
+      try {
+        // Send POST request to the API
+        const response = await fetch('/api/posts', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(formValue),
+        });    
+        if (!response.ok) {
+          throw new Error('Failed to post the blog');
+        }
+    
+        const data = await response.json();
+        console.log('Blog successfully posted:', data);
+    
+        // Reset the form after successful submission
+        form.reset();
+      } catch (error) {
+        console.error('Error submitting form:', error);
+      }    };
+    
+ 
+
 
 
     const handleDraft = ()=>{
@@ -50,6 +72,7 @@ export default function Home() {
       setDraft(draftValues)
       form.reset();
     }
+
   return (
    <section className="p-5">
     <Card>
@@ -120,3 +143,4 @@ export default function Home() {
    </section>
   );
 }
+export default Home;
