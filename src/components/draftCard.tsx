@@ -19,7 +19,6 @@ import { z } from "zod"
 import {useDraft} from "../lib/store/store"
 import { formSchema } from "@/constants/formSchema"
 
-
 export const DraftCard = ({onSubmit})=>{
     const {draft,setDraft} = useDraft()
       const form = useForm<z.infer<typeof formSchema>>({
@@ -74,12 +73,11 @@ export const DraftCard = ({onSubmit})=>{
                           </FormItem>
                         )}
                       />
-        
                        <div className="flex gap-2">
                         <Button type="submit">Send</Button>
                         <Button 
                         disabled={draft}
-                        type="button"  variant="outline">
+                        type="button"  variant="destructive">
                           Delete
                         </Button>
                       </div>

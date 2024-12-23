@@ -2,10 +2,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient
 export async function POST(req: Request): Promise<Response> {
     try {
-        console.log(1111);
-        const body = await req.json();
-        console.log("Parsed Body:", body);
-    
+        const body = await req.json();    
         const { name, description }: { name: string; description: string } = body;
     
         const newPost = await prisma.blogPost.create({
