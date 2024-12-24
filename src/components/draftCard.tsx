@@ -29,8 +29,13 @@ export const DraftCard = ({onSubmit})=>{
         },
       })
 
+
+
       const handleSubmit = ()=>{
         form.handleSubmit(onSubmit)
+        setDraft(null)
+      }
+      const handleRemove = ()=>{
         setDraft(null)
       }
     
@@ -76,8 +81,7 @@ export const DraftCard = ({onSubmit})=>{
                        <div className="flex gap-2">
                         <Button type="submit">Send</Button>
                         <Button 
-                        disabled={draft}
-                        type="button"  variant="destructive">
+                        type="button" onClick={handleRemove}  variant="destructive">
                           Delete
                         </Button>
                       </div>
