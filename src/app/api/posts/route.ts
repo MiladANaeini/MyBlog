@@ -28,22 +28,3 @@ export async function GET(): Promise<Response> {
     });
   }
 }
-
-export async function DELETE(req: Request): Promise<Response> {
-  try {
-    const { id }: { id: string } = await req.json();
-
-    const deletedPost = await prisma.blogPost.delete({
-      where: {
-        id: id
-      }
-    });
-
-    return new Response(JSON.stringify(deletedPost), { status: 200 });
-  } catch (error) {
-    console.error("Error deleting post:", error);
-    return new Response(JSON.stringify({ message: "Error deleting post" }), {
-      status: 500
-    });
-  }
-}

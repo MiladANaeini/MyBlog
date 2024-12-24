@@ -18,30 +18,29 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import {useDraft} from "../lib/store/store"
 import { formSchema } from "@/constants/formSchema"
+import {OnSubmitType} from "../types/global"
 
-export const DraftCard = ({onSubmit})=>{
+export const DraftCard = ({ onSubmit }: { onSubmit: OnSubmitType })=>{
+  
     const {draft,setDraft} = useDraft()
-      const form = useForm<z.infer<typeof formSchema>>({
+    const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-          name: draft.name,
-          description: draft.description,
+          name: draft?.name,
+          description: draft?.description,
         },
       })
-
-
-
-      const handleSubmit = ()=>{
+    const handleSubmit = ()=>{
         form.handleSubmit(onSubmit)
         setDraft(null)
       }
-      const handleRemove = ()=>{
+    const handleRemove = ()=>{
         setDraft(null)
       }
     
     return(
         <>
-         <Card className="bg-yellow-100">
+        {draft ? <Card className="bg-yellow-100 mt-3">
             <CardHeader>Draft Form</CardHeader>
               <CardContent>
                  <Form {...form}>
@@ -81,15 +80,14 @@ export const DraftCard = ({onSubmit})=>{
                        <div className="flex gap-2">
                         <Button type="submit">Send</Button>
                         <Button 
-                        type="button" onClick={handleRemove}  variant="destructive">
+                        type="button" onClick={handleRemove} variant="destructive">
                           Delete
                         </Button>
                       </div>
                     </form>
                  </Form>
-        
               </CardContent>
-           </Card> 
+           </Card> : null}
         </>
     )
 }

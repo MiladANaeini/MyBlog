@@ -15,8 +15,10 @@ import {
 } from "@/components/ui/form";
 import { useDraft } from "../lib/store/store";
 import { DraftCard } from "@/components/draftCard";
+import { BlogCard } from "@/components/blogCard";
 import { formSchema } from "@/constants/formSchema";
 import { useMutation, useQuery } from "react-query";
+import { Loader2 } from "lucide-react";
 
 type FormValues = z.infer<typeof formSchema>;
 
@@ -28,21 +30,25 @@ const postData = async (formValue: FormValues) => {
   const response = await fetch("/api/posts", {
     method: "POST",
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json"
     },
-    body: JSON.stringify(formValue),
+    body: JSON.stringify(formValue)
   });
   const data = await response.json();
   return data;
 };
 
-
 const Home = () => {
-  const {refetch, isLoading, data: blogList } = useQuery("blogs", fetchData);
-  const { mutate: postBlogMutation, isLoading: isLoadingPost, isError, error } = useMutation(postData, {
-    onSuccess:refetch
+  const { refetch, isLoading, data: blogList } = useQuery("blogs", fetchData);
+  const {
+    mutate: postBlogMutation,
+    isLoading: isLoadingPost,
+    isError,
+    error
+  } = useMutation(postData, {
+    onSuccess: refetch
   });
-  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,8 +60,8 @@ const Home = () => {
   const { draft, setDraft } = useDraft();
 
   const onSubmit = async (formValue: FormValues) => {
-      postBlogMutation(formValue); 
-      form.reset();
+    postBlogMutation(formValue);
+    form.reset();
   };
 
   const handleDraft = () => {
@@ -65,9 +71,9 @@ const Home = () => {
   };
 
   return (
-    <section className="p-5">
+    <section className="p-16">
       <Card>
-        <CardHeader>Hello World</CardHeader>
+        <CardHeader>Create your Post</CardHeader>
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -109,6 +115,8 @@ const Home = () => {
                   onClick={handleDraft}
                   variant="outline"
                 >
+                  {isLoadingPost &&
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Draft
                 </Button>
               </div>
@@ -116,30 +124,8 @@ const Home = () => {
           </Form>
         </CardContent>
       </Card>
-      {draft ? <DraftCard onSubmit={onSubmit} /> : null}
-      <Card className="mt-3 p-8">
-        <CardHeader>Posted Blogs</CardHeader>
-        {blogList?.map(item =>
-          <Card key={item.id} className="bg-slate-100 p-3 m-4">
-            <CardContent>
-              <p>Name: {item.name}</p>
-            <div
-              className="mb-2 mt-3 grid grid-cols-[25px_1fr] items-start pb-3"
-            >
-              <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  {item.description}
-                </p>
-              </div>
-            </div>
-                <p className="text-sm text-muted-foreground ">
-                  Created At: {item.createdAt}
-                </p>
-            </CardContent>
-          </Card>
-        )}
-      </Card>
+      <DraftCard onSubmit={onSubmit} />
+      <BlogCard blogList={blogList} refetch={refetch} isLoading={isLoading} />
     </section>
   );
 };
