@@ -18,9 +18,9 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import {useDraft} from "../lib/store/store"
 import { formSchema } from "@/constants/formSchema"
-import {OnSubmitType} from "../types/global"
+import {DraftCardType} from "../types/global"
 
-export const DraftCard = ({ onSubmit }: { onSubmit: OnSubmitType })=>{
+export const DraftCard = ({ onSubmit }: DraftCardType )=>{
   
     const {draft,setDraft} = useDraft()
     const form = useForm<z.infer<typeof formSchema>>({
