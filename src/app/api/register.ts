@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { registerUser } from "./auth/utils/registerUser"; // Adjust path if needed
+import { registerUser } from "../../lib/utils/registerUser"; // Adjust path if needed
 
 export default async function handler(
   req: NextApiRequest,

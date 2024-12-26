@@ -35,7 +35,7 @@ export const AdminBlogCard = ({ item, refetch }: BlogCardType) => {
         <p className="text-sm text-muted-foreground ">
           Created At: {formattedDate(item.createdAt)}
         </p>
-        <div className="flex gap-2">
+        <div className="flex gap-2 mt-3">
           <Button type="button" onClick={handleDelete} variant="destructive">
             {isDeleteLoading &&
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
