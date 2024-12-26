@@ -19,30 +19,22 @@ import { BlogCard } from "@/components/blogCard";
 import { formSchema } from "@/constants/formSchema";
 import { useMutation, useQuery } from "react-query";
 import { Loader2 } from "lucide-react";
-
-type FormValues = z.infer<typeof formSchema>;
-
-const fetchData = async () => {
-  const response = await fetch("/api/posts");
-  return response.json();
-};
-const postData = async (formValue: FormValues) => {
-  const response = await fetch("/api/posts", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(formValue)
-  });
-  const data = await response.json();
-  return data;
-};
+import { FormValues } from "../types/global";
+import { fetchData, postData } from "@/common/helper/endpoint";
+import { isEmpty } from "../common/helper/isEmpty";
+import { PostType } from "../types/global";
+import { Loading } from "../components/shared/loading";
 
 const Home = () => {
-  const { refetch, isLoading, data: blogList } = useQuery("blogs", fetchData);
+  const {
+    refetch,
+    isLoading,
+    data: blogList,
+    isError: isBlogListError
+  } = useQuery("blogs", fetchData);
   const {
     mutate: postBlogMutation,
-    isLoading: isLoadingPost,
+    isLoading: isPostLoading,
     isError,
     error
   } = useMutation(postData, {
@@ -56,6 +48,8 @@ const Home = () => {
       description: ""
     }
   });
+  {
+  }
 
   const { draft, setDraft } = useDraft();
 
@@ -110,12 +104,12 @@ const Home = () => {
               <div className="flex gap-2">
                 <Button type="submit">Send</Button>
                 <Button
-                  disabled={draft}
+                  disabled={!!draft}
                   type="button"
                   onClick={handleDraft}
                   variant="outline"
                 >
-                  {isLoadingPost &&
+                  {isPostLoading &&
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                   Draft
                 </Button>
@@ -125,7 +119,32 @@ const Home = () => {
         </CardContent>
       </Card>
       <DraftCard onSubmit={onSubmit} />
-      <BlogCard blogList={blogList} refetch={refetch} isLoading={isLoading} />
+      {isBlogListError ? (
+        <div>An Error occurred</div>
+      ) : (
+        <>
+          {isLoading ? (
+            <Loading loading={isLoading} />
+          ) : (
+            <>
+              {!isEmpty(blogList) ? (
+                <Card className="mt-3 p-8">
+                  <CardHeader>Posted Blogs</CardHeader>
+                  {blogList?.map((item: PostType) => (
+                    <BlogCard
+                      key={item.id}
+                      item={item}
+                      refetch={refetch}
+                    />
+                  ))}
+                </Card>
+              ) : (
+                <div>No Blogs Found</div>
+              )}
+            </>
+          )}
+        </>
+      )}
     </section>
   );
 };

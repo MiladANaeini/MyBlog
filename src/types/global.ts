@@ -1,4 +1,7 @@
 import { UseQueryResult } from "react-query";
+import { z } from "zod";
+import { formSchema } from "@/constants/formSchema";
+
 export type PostType = {
   id: string;
   name: string;
@@ -12,15 +15,16 @@ export type DraftType = {
   description: string;
 };
 
-export type BlogCardProps = {
-  blogList: PostType[];
+export type BlogCardType = {
+  item: PostType;
   refetch: () => Promise<UseQueryResult>;
-  isLoading: boolean;
 };
 
-export type OnSubmitType = (
-  formValues: Record<string, unknown>
-) => void | Promise<void>;
+export type OnSubmitType = (formValues: FormValues) => void | Promise<void>;
+
+export type DraftCardType = {
+  onSubmit: OnSubmitType;
+};
 
 export type DraftStore = {
   draft: DraftType | null;
@@ -31,3 +35,5 @@ export type LoadingProps = {
   loading?: boolean;
   className?: string;
 };
+
+export type FormValues = z.infer<typeof formSchema>;
