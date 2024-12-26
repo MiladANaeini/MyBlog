@@ -1,8 +1,8 @@
 import { BLOGPOST_URL } from "@/constants/urls";
 import { FormValues } from "@/types/global";
 
-export const fetchData = async () => {
-  const response = await fetch(BLOGPOST_URL);
+export const fetchData = async (ssr: boolean = true) => {
+  const response = await fetch((ssr ? process.env.URL : "") + BLOGPOST_URL);
   return response.json();
 };
 

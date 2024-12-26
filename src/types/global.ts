@@ -6,7 +6,7 @@ export type PostType = {
   id: string;
   name: string;
   description: string;
-  createdAt: string;
+  createdAt: Date;
 };
 export type PostTypes = PostType[];
 

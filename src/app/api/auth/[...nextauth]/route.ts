@@ -4,12 +4,8 @@ import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
-import { z } from "zod";
+import { credentialsSchema } from "@/constants/formSchema";
 
-const credentialsSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long")
-});
 const prisma = new PrismaClient();
 
 export const authOptions: AuthOptions = {

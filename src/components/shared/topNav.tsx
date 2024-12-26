@@ -1,9 +1,15 @@
+import Link from "next/link";
+
 const TopNav = () => {
   return (
     <header className="flex items-center justify-between bg-white px-5 py-2 shadow-xl text-black">
-      <h3 className="text-lg font-bold">VISUAL</h3>
+      <Link href="/">
+        <h3 className="text-lg font-bold">VISUAL</h3>
+      </Link>
       <div>
-        <button className="text-sm font-medium">Logout</button>
+        <Link href="/auth/signin">
+          <p className="text-sm font-medium">Signin</p>
+        </Link>
       </div>
     </header>
   );

@@ -34,3 +34,20 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+
+
+
+## Environment variables
+
+Set the following environment variables in a .env file:
+
+| Variable        | Description |
+| --------------- | ----------- |
+| DATABASE_URL    | The path to the SQLite database file. |
+| NEXTAUTH_URL    | The URL of the Next.js app. |
+| NEXTAUTH_SECRET | The secret used to encrypt the session. |
+| GOOGLE_CLIENT_ID| The client ID of the Google OAuth2.0. |
+| GOOGLE_CLIENT_SECRET | The client secret of the Google OAuth2.0. |

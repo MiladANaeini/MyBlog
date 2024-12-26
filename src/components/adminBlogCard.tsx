@@ -1,8 +1,23 @@
+import { deleteData } from "@/common/helper/endpoint";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
+import { useMutation } from "react-query";
 import { BlogCardType } from "../types/global";
 import { formattedDate } from "@/common/helper/helpers";
 
-export const BlogCard = ({ item }: BlogCardType) => {
+export const AdminBlogCard = ({ item, refetch }: BlogCardType) => {
+  const {
+    mutate: deleteBlogMutation,
+    isLoading: isDeleteLoading
+  } = useMutation(deleteData, {
+    onSuccess: refetch
+  });
+
+  const handleDelete = () => {
+    deleteBlogMutation(item.id);
+  };
+
   return (
     <Card key={item.id} className="bg-teal-200 p-3 m-4">
       <CardContent>
@@ -20,6 +35,13 @@ export const BlogCard = ({ item }: BlogCardType) => {
         <p className="text-sm text-muted-foreground ">
           Created At: {formattedDate(item.createdAt)}
         </p>
+        <div className="flex gap-2">
+          <Button type="button" onClick={handleDelete} variant="destructive">
+            {isDeleteLoading &&
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+            Delete
+          </Button>
+        </div>
       </CardContent>
     </Card>
   );

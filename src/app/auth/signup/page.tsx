@@ -32,7 +32,7 @@ export default function SignUpPage() {
 
       setSuccess(true);
       setTimeout(() => {
-        router.push("/auth/signin"); // Redirect to Sign In
+        router.push("/auth/signin");
       }, 2000);
     } catch (err) {
       setError(err.message);
@@ -40,7 +40,7 @@ export default function SignUpPage() {
   };
 
   const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" }); // Redirect to home after Google sign-in
+    signIn("google", { callbackUrl: "/" });
   };
 
   return (
