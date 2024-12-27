@@ -1,7 +1,7 @@
 import { create } from "zustand";
-import { DraftType, DraftStore } from "../../types/global";
+import { DraftType, DraftStoreType } from "../../types/global";
 
-export const useDraft = create<DraftStore>(set => ({
+export const useDraft = create<DraftStoreType>(set => ({
   draft: null as DraftType | null,
   setDraft: (draftValue: DraftType | null) => set(() => ({ draft: draftValue }))
 }));

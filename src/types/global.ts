@@ -1,6 +1,10 @@
 import { UseQueryResult } from "react-query";
 import { z } from "zod";
-import { formSchema } from "@/constants/formSchema";
+import {
+  formSchema,
+  signUpSchema,
+  credentialsSchema
+} from "@/constants/validationSchema";
 
 export type PostType = {
   id: string;
@@ -20,20 +24,24 @@ export type BlogCardType = {
   refetch: () => Promise<UseQueryResult>;
 };
 
-export type OnSubmitType = (formValues: FormValues) => void | Promise<void>;
+export type FormValueType = z.infer<typeof formSchema>;
+
+export type OnSubmitType = (formValues: FormValueType) => void | Promise<void>;
 
 export type DraftCardType = {
   onSubmit: OnSubmitType;
 };
 
-export type DraftStore = {
+export type DraftStoreType = {
   draft: DraftType | null;
   setDraft: (draftValue: DraftType | null) => void;
 };
 
-export type LoadingProps = {
+export type LoadingType = {
   loading?: boolean;
   className?: string;
 };
 
-export type FormValues = z.infer<typeof formSchema>;
+export type SignInFormValueType = z.infer<typeof credentialsSchema>;
+
+export type SignUpFormValueType = z.infer<typeof signUpSchema>;

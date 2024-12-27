@@ -17,7 +17,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useDraft } from "../lib/store/store"
-import { formSchema } from "@/constants/formSchema"
+import { formSchema } from "@/constants/validationSchema"
 import { DraftCardType } from "../types/global"
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
@@ -26,6 +26,7 @@ import rehypeRaw from "rehype-raw";
 export const DraftCard = ({ onSubmit }: DraftCardType) => {
 
   const { draft, setDraft } = useDraft()
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

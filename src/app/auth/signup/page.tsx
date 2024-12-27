@@ -1,6 +1,5 @@
 "use client";
 import { useMutation } from "react-query";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Input } from "@/components/ui/input";
@@ -16,37 +15,21 @@ import {
   FormMessage
 } from "@/components/ui/form";
 import Link from "next/link";
-import { signUpSchema } from "@/constants/formSchema";
-
-type SignUpFormValues = z.infer<typeof signUpSchema>;
+import { signUpSchema } from "@/constants/validationSchema";
+import { register } from "@/common/helper/endpoint";
+import { SignUpFormValueType } from "@/types/global";
 
 export default function SignUpPage() {
   const router = useRouter();
 
-  const mutation = useMutation(
-    async (data: SignUpFormValues) => {
-      const res = await fetch("/api/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data)
-      });
-
-      if (!res.ok) {
-        const { error } = await res.json();
-        throw new Error(error || "Something went wrong");
-      }
-
-      return res.json();
-    },
-    {
-      onSuccess: () => {
-        setTimeout(() => {
-          router.push("/auth/signin");
-        }, 2000);
-      }
+  const mutation = useMutation(register, {
+    onSuccess: () => {
+      setTimeout(() => {
+        router.push("/auth/signin");
+      }, 2000);
     }
-  );
-  const form = useForm<SignUpFormValues>({
+  });
+  const form = useForm<SignUpFormValueType>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
       email: "",
@@ -54,7 +37,7 @@ export default function SignUpPage() {
     }
   });
 
-  const onSubmit = (values: SignUpFormValues) => {
+  const onSubmit = (values: SignUpFormValueType) => {
     mutation.mutate(values);
   };
   return (

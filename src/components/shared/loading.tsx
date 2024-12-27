@@ -1,6 +1,6 @@
-import { LoadingProps } from "../../types/global";
+import { LoadingType } from "../../types/global";
 
-export const Loading = ({ loading = false, className }: LoadingProps) => {
+export const Loading = ({ loading = false, className }: LoadingType) => {
   if (!loading) {
     return null;
   }

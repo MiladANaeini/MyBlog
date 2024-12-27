@@ -15,23 +15,24 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { formSchema } from "@/constants/formSchema";
+import { formSchema } from "@/constants/validationSchema";
 import { useDraft } from "@/lib/store/store";
-import { FormValues, PostType } from "@/types/global";
+import { FormValueType, PostType } from "@/types/global";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import { z } from "zod";
 
-
 const Admin = () => {
+
   const {
     refetch,
     isLoading,
     data: blogList,
     isError: isBlogListError,
   } = useQuery("blogs", () => fetchData(false));
+
   const {
     mutate: postBlogMutation,
     isLoading: isPostLoading,
@@ -46,12 +47,10 @@ const Admin = () => {
       description: "",
     },
   });
-  {
-  }
 
   const { draft, setDraft } = useDraft();
 
-  const onSubmit = async (formValue: FormValues) => {
+  const onSubmit = async (formValue: FormValueType) => {
     postBlogMutation(formValue);
     form.reset();
   };

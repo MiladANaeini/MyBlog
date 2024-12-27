@@ -4,11 +4,10 @@ import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useRouter } from "next/navigation";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { signInSchema } from "@/constants/formSchema";
+import { credentialsSchema } from "@/constants/validationSchema";
 import Link from "next/link";
 import {
   Form,
@@ -18,14 +17,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
-type SignInFormValues = z.infer<typeof signInSchema>;
+import { SignInFormValueType } from "@/types/global";
 
 export default function SignInPage() {
   const router = useRouter();
 
   const mutation = useMutation(
-    async (data: SignInFormValues) => {
+    async (data: SignInFormValueType) => {
       const res = await signIn("credentials", {
         redirect: false,
         email: data.email,
@@ -45,15 +43,15 @@ export default function SignInPage() {
     }
   );
 
-  const form = useForm<SignInFormValues>({
-    resolver: zodResolver(signInSchema),
+  const form = useForm<SignInFormValueType>({
+    resolver: zodResolver(credentialsSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: SignInFormValues) => {
+  const onSubmit = (values: SignInFormValueType) => {
     mutation.mutate(values);
   };
 
@@ -100,7 +98,6 @@ export default function SignInPage() {
                 </FormItem>
               )}
             />
-            {/* Submit Button */}
             <Button type="submit" className="w-full" disabled={mutation.isLoading}>
               {mutation.isLoading ? "Signing In..." : "Sign In"}
             </Button>
