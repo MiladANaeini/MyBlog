@@ -5,6 +5,8 @@ import { Loader2 } from "lucide-react";
 import { useMutation } from "react-query";
 import { BlogCardType } from "../types/global";
 import { formattedDate } from "@/common/helper/helpers";
+import ReactMarkdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 export const AdminBlogCard = ({ item, refetch }: BlogCardType) => {
   const {
@@ -27,9 +29,10 @@ export const AdminBlogCard = ({ item, refetch }: BlogCardType) => {
         <div className="mb-2 mt-3 grid grid-cols-[25px_1fr] items-start pb-3">
           <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
           <div className="space-y-1">
-            <p className="text-sm font-medium leading-none">
-              {item.description}
-            </p>
+            <p className="text-sm font-medium leading-none">Description:</p>
+            <ReactMarkdown className="prose mt-1" rehypePlugins={[rehypeRaw]}>
+              {item.description || "No description available."}
+            </ReactMarkdown>
           </div>
         </div>
         <p className="text-sm text-muted-foreground ">

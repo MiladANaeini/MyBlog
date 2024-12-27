@@ -24,6 +24,12 @@ const TopNav = () => {
         </Link>
         {status === "loading"
           ? <p className="text-sm font-bold">Loading...</p>
+          : session &&
+            <Link href="/admin">
+              <p className="text-sm font-bold">Create</p>
+            </Link>}
+        {status === "loading"
+          ? <p className="text-sm font-bold">Loading...</p>
           : session
             ? <button
                 onClick={handleSignOut}

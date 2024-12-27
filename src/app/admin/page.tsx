@@ -24,6 +24,7 @@ import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "react-query";
 import { z } from "zod";
 
+
 const Admin = () => {
   const {
     refetch,
@@ -94,6 +95,7 @@ const Admin = () => {
                     <FormControl>
                       <Textarea placeholder="Enter a description" {...field} />
                     </FormControl>
+                
                     {form.formState.errors.description && (
                       <p className="text-red-500 text-sm mt-1">
                         {form.formState.errors.description.message}
@@ -120,7 +122,7 @@ const Admin = () => {
           </Form>
         </CardContent>
       </Card>
-      <DraftCard onSubmit={onSubmit} />
+      {draft && <DraftCard onSubmit={onSubmit} />}
       {isBlogListError ? (
         <div>An Error occurred</div>
       ) : (
