@@ -1,5 +1,5 @@
 "use client";
-
+import { useMutation } from "react-query";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,25 +12,33 @@ export default function SignInPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
+  const mutation = useMutation(
+    async ({ email, password }: { email: string; password: string }) => {
+      const res = await signIn("credentials", {
+        redirect: false,
+        email,
+        password,
+      });
+
+      if (res?.error) {
+        throw new Error(res.error);
+      }
+      return res;
+    },
+    {
+      onSuccess: () => {
+        router.push("/admin");
+      },
+      onError: (err: any) => {
+        setError(err.message); // Display the error message
+      },
+    }
+  );
+
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-
-    const res = await signIn("credentials", {
-      redirect: false,
-      email,
-      password,
-    });
-
-    if (res?.error) {
-      setError(res.error);
-    } else {
-      router.push("/"); // Redirect to home or dashboard
-    }
-  };
-
-  const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" }); // Redirect to home after Google sign-in
+    mutation.mutate({ email, password });
   };
 
   return (
@@ -68,12 +76,6 @@ export default function SignInPage() {
           </Button>
         </form>
         <div className="text-center">
-          <Button
-            onClick={handleGoogleSignIn}
-            className="w-full bg-red-500 hover:bg-red-600 mt-4"
-          >
-            Sign in with Google
-          </Button>
           <p className="mt-4">
             Do not have an account?{" "}
             <a href="/auth/signup" className="text-blue-500 hover:underline">

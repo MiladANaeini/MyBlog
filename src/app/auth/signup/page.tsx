@@ -1,6 +1,5 @@
 "use client";
-
-import { signIn } from "next-auth/react";
+import { useMutation } from "react-query";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
@@ -9,17 +8,11 @@ import { useRouter } from "next/navigation";
 export default function SignUpPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
   const router = useRouter();
 
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    setSuccess(false);
-
-    try {
-      const res = await fetch("/api/auth/register", {
+  const mutation = useMutation(
+    async ({ email, password }: { email: string; password: string }) => {
+      const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -30,28 +23,36 @@ export default function SignUpPage() {
         throw new Error(error || "Something went wrong");
       }
 
-      setSuccess(true);
-      setTimeout(() => {
-        router.push("/auth/signin");
-      }, 2000);
-    } catch (err) {
-      setError(err.message);
+      return res.json();
+    },
+    {
+      onSuccess: () => {
+        setTimeout(() => {
+          router.push("/auth/signin");
+        }, 2000);
+      },
+      onError: (err: any) => {
+        alert(err.message);
+      }
     }
-  };
+  );
 
-  const handleGoogleSignIn = () => {
-    signIn("google", { callbackUrl: "/" });
+  const handleSignUp = (e: React.FormEvent) => {
+    e.preventDefault();
+    mutation.mutate({ email, password });
   };
 
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-md shadow-md">
         <h2 className="text-2xl font-semibold text-center">Sign Up</h2>
-        {error &&
+        {mutation.isError &&
           <p className="text-red-500 text-sm">
-            {error}
+            {mutation.error instanceof Error
+              ? mutation.error.message
+              : "Something went wrong"}
           </p>}
-        {success &&
+        {mutation.isSuccess &&
           <p className="text-green-500 text-sm">
             Registration successful! Redirecting to sign in...
           </p>}
@@ -85,12 +86,6 @@ export default function SignUpPage() {
           </Button>
         </form>
         <div className="text-center">
-          <Button
-            onClick={handleGoogleSignIn}
-            className="w-full bg-red-500 hover:bg-red-600 mt-4"
-          >
-            Sign up with Google
-          </Button>
           <p className="mt-4">
             Already have an account?{" "}
             <a href="/auth/signin" className="text-blue-500 hover:underline">
