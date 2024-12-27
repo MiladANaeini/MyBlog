@@ -33,25 +33,33 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
       description: draft?.description || "",
     },
   })
-  console.log("draft",draft);
-  console.log("form.default.values",form);
 
   const handleSubmit = form.handleSubmit((data) => {
     onSubmit(data);
     setDraft(null);
   });
-  
+
   const handleRemove = () => {
     setDraft(null)
   }
-
+  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.type !== "text/markdown" && !file.name.endsWith(".md")) {
+        alert("Please upload a valid Markdown file.");
+        return;
+      }
+      const text = await file.text(); 
+      form.setValue("description", text); 
+    }
+  };
   return (
     <>
       <Card className="bg-yellow-100 mt-3">
         <CardHeader>Draft Form</CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={() => handleSubmit()} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -77,6 +85,10 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
                     <FormControl>
                       <Textarea placeholder="Enter a description" {...field} />
                     </FormControl>
+                    {form.formState.errors.description && (
+                      <p className="text-red-500 text-sm mt-1">
+                        {form.formState.errors.description.message}
+                      </p>)}
                     <p className="text-sm text-gray-500 mt-2">
                       You can use Markdown syntax here.
                     </p>
@@ -88,10 +100,6 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
                         {field.value || "Start typing to see a live preview..."}
                       </ReactMarkdown>
                     </div>
-                    {form.formState.errors.description && (
-                      <p className="text-red-500 text-sm mt-1">
-                        {form.formState.errors.description.message}
-                      </p>)}
                   </FormItem>
                 )}
               />
@@ -101,11 +109,19 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
                   type="button" onClick={handleRemove} variant="destructive">
                   Delete
                 </Button>
+                <Input
+                  id="picture"
+                  type="file"
+                  accept=".md,text/markdown"
+                  onChange={handleFileUpload}
+                  className=" cursor-pointer file:bg-blue-50
+                 file:text-blue-700 hover:file:bg-blue-100 w-56"
+                />
               </div>
             </form>
           </Form>
         </CardContent>
-      </Card> 
+      </Card>
     </>
   )
 }
