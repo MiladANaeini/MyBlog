@@ -3,87 +3,119 @@ import { useMutation } from "react-query";
 import { signIn } from "next-auth/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { signInSchema } from "@/constants/formSchema";
+import Link from "next/link";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+type SignInFormValues = z.infer<typeof signInSchema>;
 
 export default function SignInPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const router = useRouter();
 
   const mutation = useMutation(
-    async ({ email, password }: { email: string; password: string }) => {
+    async (data: SignInFormValues) => {
       const res = await signIn("credentials", {
         redirect: false,
-        email,
-        password,
+        email: data.email,
+        password: data.password,
       });
 
       if (res?.error) {
         throw new Error(res.error);
       }
+
       return res;
     },
     {
       onSuccess: () => {
         router.push("/admin");
       },
-      onError: (err: any) => {
-        setError(err.message); // Display the error message
-      },
     }
   );
 
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError("");
-    mutation.mutate({ email, password });
+  const form = useForm<SignInFormValues>({
+    resolver: zodResolver(signInSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (values: SignInFormValues) => {
+    mutation.mutate(values);
   };
+
 
   return (
     <div className="flex justify-center items-center h-screen">
-      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-md shadow-md">
-        <h2 className="text-2xl font-semibold text-center">Sign In</h2>
-        {error && <p className="text-red-500 text-sm">{error}</p>}
-        <form onSubmit={handleSignIn} className="space-y-4">
-          <div>
-            <label htmlFor="email" className="block text-sm font-medium">
-              Email
-            </label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="Your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+        <Card className="flex flex-col justify-between items-center w-full max-w-md p-8 space-y-6">
+        {" "}<CardHeader className="text-2xl font-semibold text-center mb-1">
+          Sign In
+        </CardHeader>
+        <CardContent>
+        {mutation.isError && (
+          <p className="text-red-500 text-sm">{mutation.error?.message}</p>
+        )}
+       <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input type="email" placeholder="Your email" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <div>
-            <label htmlFor="password" className="block text-sm font-medium">
-              Password
-            </label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="Your password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      placeholder="Your password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
-          <Button type="submit" className="w-full">
-            Sign In
-          </Button>
-        </form>
+            {/* Submit Button */}
+            <Button type="submit" className="w-full" disabled={mutation.isLoading}>
+              {mutation.isLoading ? "Signing In..." : "Sign In"}
+            </Button>
+          </form>
+        </Form>
         <div className="text-center">
           <p className="mt-4">
-            Do not have an account?{" "}
-            <a href="/auth/signup" className="text-blue-500 hover:underline">
+            Don’t have an account?{" "}
+            <Link href="/auth/signup" className="text-blue-500 hover:underline">
               Sign Up
-            </a>
+            </Link>
           </p>
         </div>
+        </CardContent>
+        </Card>
       </div>
-    </div>
   );
 }
