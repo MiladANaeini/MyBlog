@@ -3,7 +3,6 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
 import { credentialsSchema } from "@/constants/validationSchema";
 
 const prisma = new PrismaClient();
@@ -35,10 +34,6 @@ export const authOptions: AuthOptions = {
           throw new Error("Invalid credentials");
         }
       }
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
     })
   ],
   pages: {
