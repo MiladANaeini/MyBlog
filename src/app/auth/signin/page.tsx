@@ -64,7 +64,7 @@ export default function SignInPage() {
         </CardHeader>
         <CardContent>
         {mutation.isError && (
-          <p className="text-red-500 text-sm">{mutation.error?.message}</p>
+          <p className="text-red-500 text-sm"> {(mutation.error as { message: string })?.message || 'An error occurred'}</p>
         )}
        <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">

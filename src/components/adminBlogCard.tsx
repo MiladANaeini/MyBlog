@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Loader2 } from "lucide-react";
 import { useMutation } from "react-query";
-import { BlogCardType } from "../types/global";
+import { AdminBlogCardType } from "../types/global";
 import { formattedDate } from "@/common/helper/helpers";
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-export const AdminBlogCard = ({ item, refetch }: BlogCardType) => {
+export const AdminBlogCard = ({ item, refetch }: AdminBlogCardType) => {
   const {
     mutate: deleteBlogMutation,
     isLoading: isDeleteLoading

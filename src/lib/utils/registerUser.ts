@@ -21,7 +21,7 @@ export async function registerUser(email: string, password: string) {
 
     return newUser;
   } catch (error) {
-    if (error.message.startsWith("409")) {
+    if (error instanceof Error && error.message.startsWith("409")) {
       throw { status: 409, message: "Email already exists" };
     }
     console.error("Registration error:", error);

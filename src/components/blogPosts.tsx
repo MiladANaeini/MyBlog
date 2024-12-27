@@ -2,7 +2,6 @@ import { fetchData } from "@/common/helper/endpoint";
 import { PostType } from "@/types/global";
 import { BlogCard } from "./blogCard";
 import { Card, CardHeader } from "./ui/card";
-import { UseQueryResult } from "react-query";
 
 export default async function BlogPosts() {
   const data = await fetchData();
@@ -12,9 +11,7 @@ export default async function BlogPosts() {
     <Card className="mt-3 p-8">
       <CardHeader>Posted Blogs</CardHeader>
       {data?.map((item: PostType) => (
-        <BlogCard key={item.id} item={item} refetch={function (): Promise<UseQueryResult> {
-              throw new Error("Function not implemented.");
-          } } />
+        <BlogCard key={item.id} item={item} />
       ))}
     </Card>
     </section>

@@ -21,6 +21,10 @@ export type DraftType = {
 
 export type BlogCardType = {
   item: PostType;
+};
+
+export type AdminBlogCardType = {
+  item: PostType;
   refetch: () => Promise<UseQueryResult>;
 };
 
@@ -41,7 +45,9 @@ export type LoadingType = {
   loading?: boolean;
   className?: string;
 };
-
+export type ErrorWithStatusType = {
+  status: number;
+};
 export type SignInFormValueType = z.infer<typeof credentialsSchema>;
 
 export type SignUpFormValueType = z.infer<typeof signUpSchema>;
