@@ -18,7 +18,7 @@ Welcome to MyBlog App
 
 Make sure you have the following software installed on your system:
 
-- Node.js (version = v22.12.0)
+- Node.js (version > 18)
 - npm (JavaScript package manager)
 
 ### Installation
