@@ -48,6 +48,8 @@ const Admin = () => {
     },
   });
 
+  const { name, description } = form.watch();
+
   const { draft, setDraft } = useDraft();
 
   const onSubmit = async (formValue: FormValueType) => {
@@ -106,7 +108,7 @@ const Admin = () => {
               <div className="flex gap-2">
                 <Button type="submit">Send</Button>
                 <Button
-                  disabled={!!draft}
+                  disabled={!!draft || !name.trim() || !description.trim()}
                   type="button"
                   onClick={handleDraft}
                   variant="outline"

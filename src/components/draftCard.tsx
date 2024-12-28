@@ -22,11 +22,10 @@ import { DraftCardType } from "../types/global"
 import ReactMarkdown from "react-markdown";
 import rehypeRaw from "rehype-raw";
 
-
 export const DraftCard = ({ onSubmit }: DraftCardType) => {
 
   const { draft, setDraft } = useDraft()
-  
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,14 +34,22 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
     },
   })
 
-  const handleSubmit = form.handleSubmit((data) => {
+  const { setValue, handleSubmit } = form;
+
+  const handleFormSubmit = handleSubmit((data) => {
     onSubmit(data);
     setDraft(null);
   });
 
+  const handleSaveDraft = handleSubmit((data) => {
+    setDraft(data);
+  });
+
+
   const handleRemove = () => {
     setDraft(null)
   }
+
   const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -50,17 +57,18 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
         alert("Please upload a valid Markdown file.");
         return;
       }
-      const text = await file.text(); 
-      form.setValue("description", text); 
+      const text = await file.text();
+      setValue("description", text);
     }
   };
+
   return (
     <>
       <Card className="bg-yellow-100 mt-3">
         <CardHeader>Draft Form</CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleFormSubmit} className="space-y-4">
               <FormField
                 control={form.control}
                 name="name"
@@ -68,7 +76,10 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
                   <FormItem>
                     <FormLabel>Name</FormLabel>
                     <FormControl>
-                      <Input placeholder="Enter your name" {...field} />
+                      <Input
+                        {...field}
+                        placeholder="Enter your name"
+                      />
                     </FormControl>
                     {form.formState.errors.name && (
                       <p className="text-red-500 text-sm mt-1">
@@ -84,7 +95,10 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
                   <FormItem>
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea placeholder="Enter a description" {...field} />
+                      <Textarea
+                        placeholder="Enter a description"
+                        {...field}
+                      />
                     </FormControl>
                     {form.formState.errors.description && (
                       <p className="text-red-500 text-sm mt-1">
@@ -107,16 +121,22 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
               <div className="flex gap-2">
                 <Button type="submit">Send</Button>
                 <Button
-                  type="button" onClick={handleRemove} variant="destructive">
+                  type="button" 
+                  onClick={handleRemove} 
+                  variant="destructive">
                   Delete
                 </Button>
+                <Button
+                 type="button"
+                  variant="outline"
+                  onClick={handleSaveDraft}>Save</Button>
                 <Input
                   id="picture"
                   type="file"
                   accept=".md,text/markdown"
                   onChange={handleFileUpload}
                   className=" cursor-pointer file:bg-blue-50
-                 file:text-blue-700 hover:file:bg-blue-100 w-56"
+                 file:text-blue-700 hover:file:bg-blue-100 max-w-52 "
                 />
               </div>
             </form>
