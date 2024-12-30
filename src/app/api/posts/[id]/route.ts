@@ -1,8 +1,20 @@
 import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]/route";
+
 const prisma = new PrismaClient();
 
 export async function DELETE(req: Request): Promise<Response> {
   try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return new Response(
+        JSON.stringify({ message: "Unauthorized: Please log in first" }),
+        { status: 401 }
+      );
+    }
+
     const url = new URL(req.url);
     const id = url.pathname.split("/").pop();
 
