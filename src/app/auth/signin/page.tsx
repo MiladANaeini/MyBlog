@@ -64,7 +64,7 @@ export default function SignInPage() {
         </CardHeader>
         <CardContent>
         {mutation.isError && (
-          <p className="text-red-500 text-sm"> {(mutation.error as { message: string })?.message || 'An error occurred'}</p>
+          <div className="text-red-500 text-sm"> {(mutation.error as { message: string })?.message || 'An error occurred'}</div>
         )}
        <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -104,12 +104,12 @@ export default function SignInPage() {
           </form>
         </Form>
         <div className="text-center">
-          <p className="mt-4">
+          <div className="mt-4">
             Don’t have an account?{" "}
             <Link href="/auth/signup" className="text-blue-500 hover:underline">
               Sign Up
             </Link>
-          </p>
+          </div>
         </div>
         </CardContent>
         </Card>

@@ -82,9 +82,9 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
                       />
                     </FormControl>
                     {form.formState.errors.name && (
-                      <p className="text-red-500 text-sm mt-1">
+                      <div className="text-red-500 text-sm mt-1">
                         {form.formState.errors.name.message}
-                      </p>)}
+                      </div>)}
                   </FormItem>
                 )}
               />
@@ -101,9 +101,9 @@ export const DraftCard = ({ onSubmit }: DraftCardType) => {
                       />
                     </FormControl>
                     {form.formState.errors.description && (
-                      <p className="text-red-500 text-sm mt-1">
+                      <div className="text-red-500 text-sm mt-1">
                         {form.formState.errors.description.message}
-                      </p>)}
+                      </div>)}
                     <p className="text-sm text-gray-500 mt-2">
                       You can use Markdown syntax here.
                     </p>

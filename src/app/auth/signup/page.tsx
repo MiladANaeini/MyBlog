@@ -48,11 +48,11 @@ export default function SignUpPage() {
         </CardHeader>
         <CardContent>
           {mutation.isError &&
-            <p className="text-red-500 text-sm">
+            <div className="text-red-500 text-sm">
               {mutation.error instanceof Error
                 ? mutation.error.message
                 : "Something went wrong"}
-            </p>}
+            </div>}
           {mutation.isSuccess &&
             <p className="text-green-500 text-sm">
               Registration successful! Redirecting to sign in...
@@ -97,7 +97,7 @@ export default function SignUpPage() {
             </form>
           </Form>
           <div className="text-center">
-            <p className="mt-4">
+            <div className="mt-4">
               Already have an account?{" "}
               <Link
                 href="/auth/signin"
@@ -105,7 +105,7 @@ export default function SignUpPage() {
               >
                 Sign In
               </Link>
-            </p>
+            </div>
           </div>
         </CardContent>
       </Card>

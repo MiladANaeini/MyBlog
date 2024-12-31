@@ -20,9 +20,9 @@ export const BlogCard = ({ item }: BlogCardType) => {
             </ReactMarkdown>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground ">
+        <div className="text-sm text-muted-foreground ">
           Created At: {formattedDate(item.createdAt)}
-        </p>
+        </div>
       </CardContent>
     </Card>
   );

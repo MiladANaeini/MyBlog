@@ -35,9 +35,9 @@ export const AdminBlogCard = ({ item, refetch }: AdminBlogCardType) => {
             </ReactMarkdown>
           </div>
         </div>
-        <p className="text-sm text-muted-foreground ">
+        <div className="text-sm text-muted-foreground ">
           Created At: {formattedDate(item.createdAt)}
-        </p>
+        </div>
         <div className="flex gap-2 mt-3">
           <Button type="button" onClick={handleDelete} variant="destructive">
             {isDeleteLoading &&

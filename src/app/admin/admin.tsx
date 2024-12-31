@@ -79,9 +79,9 @@ const Admin = () => {
                       <Input placeholder="Enter your name" {...field} />
                     </FormControl>
                     {form.formState.errors.name && (
-                      <p className="text-red-500 text-sm mt-1">
+                      <div className="text-red-500 text-sm mt-1">
                         {form.formState.errors.name.message}
-                      </p>
+                      </div>
                     )}
                   </FormItem>
                 )}
@@ -97,9 +97,9 @@ const Admin = () => {
                     </FormControl>
 
                     {form.formState.errors.description && (
-                      <p className="text-red-500 text-sm mt-1">
+                      <div className="text-red-500 text-sm mt-1">
                         {form.formState.errors.description.message}
-                      </p>
+                      </div>
                     )}
                   </FormItem>
                 )}
