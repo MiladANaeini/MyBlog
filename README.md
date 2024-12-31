@@ -43,6 +43,8 @@ Make sure you have the following software installed on your system:
 
 ## Environment variables
 
+Refer to the .env.example file for a template of the required environment variables. The sensitive values will be emailed to you.
+
 | Variable        | Description |
 | --------------- | ----------- |
 | URL             | URL="http://localhost:3000" . |
