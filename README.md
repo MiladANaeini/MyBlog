@@ -31,15 +31,7 @@ Make sure you have the following software installed on your system:
    npm install
 ```
 
-4. Open a new terminal window and start the frontend project by running:
-
-```shell
-   npm run dev
-```
-
-5. Access the frontend project in your browser at http://localhost:3000/.
-
-6. Set the following environment variables in a .env file:
+4. Set the following environment variables in a .env file:
 
 ## Environment variables
 
@@ -51,3 +43,17 @@ Refer to the .env.example file for a template of the required environment variab
 | DATABASE_URL    | The path to the SQLite database file. |
 | NEXTAUTH_URL    | The URL of the Next.js app. |
 | NEXTAUTH_SECRET | The secret used to encrypt the session. |
+
+5. Open a new terminal window and migrate the database by running:
+
+```shell
+   npx prisma migrate dev
+```
+
+6. Start the frontend project by running:
+
+```shell
+   npm run dev
+```
+
+7. Access the frontend project in your browser at http://localhost:3000/.
