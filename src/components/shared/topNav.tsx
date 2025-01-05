@@ -7,7 +7,7 @@ const TopNav = () => {
 
   const handleSignOut = async () => {
     try {
-      await signOut({ callbackUrl: "/" }); // Sign the user out and redirect to the homepage
+      await signOut({ callbackUrl: "/" }); 
     } catch (error) {
       console.error("Error signing out:", error);
     }

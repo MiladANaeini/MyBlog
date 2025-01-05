@@ -3,6 +3,8 @@ import { PostType } from "@/types/global";
 import { BlogCard } from "./blogCard";
 import { Card, CardHeader } from "./ui/card";
 import Link from "next/link";
+import { isEmpty } from "@/common/helper/helpers";
+
 
 export default async function BlogPosts() {
   const data = await fetchData();
@@ -12,7 +14,7 @@ export default async function BlogPosts() {
       {data && (
         <Card className="mt-3 p-8">
           <CardHeader>Posted Blogs</CardHeader>
-          {data.length ? (
+          {!isEmpty(data) ? (
             <>
               {data.map((item: PostType) => (
                 <BlogCard key={item.id} item={item} />
@@ -21,7 +23,7 @@ export default async function BlogPosts() {
           ) : (
             <div className="bg-yellow-100 mt-3 p-4">
               No blog posts have been created.
-              <Link href="/auth/signin">
+              <Link href="/admin">
                 <span className="text-sm font-bold text-blue-500">
                   Sign In{" "}
                 </span>
